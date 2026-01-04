@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,18 +8,24 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        body { 
-            font-family: 'Inter', sans-serif; 
-            background-color: #f3f4f6; /* gray-100 */
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f3f4f6;
+            /* gray-100 */
         }
-        [contenteditable]:empty:before { 
-            content: attr(data-placeholder); 
-            color: #9ca3af; /* gray-400 */
-            pointer-events: none; 
-            display: block; 
+
+        [contenteditable]:empty:before {
+            content: attr(data-placeholder);
+            color: #9ca3af;
+            /* gray-400 */
+            pointer-events: none;
+            display: block;
         }
-        .status-select { 
-            -webkit-appearance: none; -moz-appearance: none; appearance: none;
+
+        .status-select {
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            appearance: none;
             padding: 6px 10px;
             border-radius: 6px;
             color: white;
@@ -26,73 +33,97 @@
             text-align: center;
             cursor: pointer;
         }
+
         .employee-nav-item {
             padding: 8px 16px;
             border-bottom: 3px solid transparent;
             transition: all 0.2s ease-in-out;
             font-weight: 600;
-            color: #4b5563; /* gray-600 */
+            color: #4b5563;
+            /* gray-600 */
             cursor: pointer;
         }
+
         .employee-nav-item:hover {
-            background-color: #e5e7eb; /* gray-200 */
+            background-color: #e5e7eb;
+            /* gray-200 */
         }
+
         .employee-nav-item.active {
-            color: #2563eb; /* blue-600 */
+            color: #2563eb;
+            /* blue-600 */
             border-bottom-color: #2563eb;
         }
-        #save-status { transition: opacity 0.5s ease-in-out; }
-        
+
+        #save-status {
+            transition: opacity 0.5s ease-in-out;
+        }
+
         #addRowBtn:disabled {
             background-color: #9ca3af;
             cursor: not-allowed;
         }
+
         .input-field {
-            background-color: #f9fafb; /* gray-50 */
-            border: 1px solid #d1d5db; /* gray-300 */
+            background-color: #f9fafb;
+            /* gray-50 */
+            border: 1px solid #d1d5db;
+            /* gray-300 */
             border-radius: 6px;
             padding: 8px;
             width: 100%;
         }
+
         .input-field:focus {
             outline: none;
             border-color: #2563eb;
             box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.4);
         }
+
         .input-field:disabled {
-            background-color: #e5e7eb; /* gray-200 */
-            color: #6b7280; /* gray-500 */
+            background-color: #e5e7eb;
+            /* gray-200 */
+            color: #6b7280;
+            /* gray-500 */
             cursor: not-allowed;
         }
+
         td {
             vertical-align: middle;
         }
+
         .input-field[contenteditable]:empty {
             text-align: center;
         }
+
         button:disabled {
             opacity: 0.5;
             cursor: not-allowed;
         }
-        .day-separator > td {
+
+        .day-separator>td {
             border-top: 4px solid #e5e7eb !important;
         }
+
         .notification-dot {
             position: absolute;
             top: 2px;
             right: 2px;
             width: 8px;
             height: 8px;
-            background-color: #ef4444; /* red-500 */
+            background-color: #ef4444;
+            /* red-500 */
             border-radius: 9999px;
             border: 2px solid white;
         }
+
         .dropdown-menu {
             transform-origin: top left;
             transition: transform 0.2s ease-out, opacity 0.2s ease-out;
         }
     </style>
 </head>
+
 <body class="p-4 sm:p-6 lg:p-8">
 
     <div id="main-app" class="hidden">
@@ -100,67 +131,108 @@
             <header class="bg-cyan-500 p-4 rounded-t-lg flex justify-between items-center">
                 <div class="flex items-center space-x-2">
                     <div id="admin-menu-container" class="relative hidden">
-                        <button id="admin-menu-btn" class="flex items-center text-white font-semibold py-2 px-4 rounded-md hover:bg-cyan-700 transition">
+                        <button id="admin-menu-btn"
+                            class="flex items-center text-white font-semibold py-2 px-4 rounded-md hover:bg-cyan-700 transition">
                             <span>Admin Tools</span>
-                            <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                            <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                                xmlns="http://www.w3.org/2000/svg">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M19 9l-7 7-7-7"></path>
+                            </svg>
                         </button>
-                        <div id="admin-menu" class="dropdown-menu absolute left-0 mt-2 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 z-10 hidden">
+                        <div id="admin-menu"
+                            class="dropdown-menu absolute left-0 mt-2 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 z-10 hidden">
                             <div class="py-1" role="menu" aria-orientation="vertical" aria-labelledby="options-menu">
-                                <a href="#" id="manage-employees-btn" class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" role="menuitem">
-                                    <svg class="w-5 h-5 mr-3 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
+                                <a href="#" id="manage-employees-btn"
+                                    class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                                    role="menuitem">
+                                    <svg class="w-5 h-5 mr-3 text-gray-500" fill="none" stroke="currentColor"
+                                        viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z">
+                                        </path>
+                                    </svg>
                                     Manage Employees
                                 </a>
-                                <a href="#" id="send-notification-btn" class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" role="menuitem">
-                                     <svg class="w-5 h-5 mr-3 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"></path></svg>
+                                <a href="#" id="send-notification-btn"
+                                    class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                                    role="menuitem">
+                                    <svg class="w-5 h-5 mr-3 text-gray-500" fill="none" stroke="currentColor"
+                                        viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"></path>
+                                    </svg>
                                     Send Notification
                                 </a>
-                                <a href="#" id="view-notes-btn" class="relative flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" role="menuitem">
-                                     <svg class="w-5 h-5 mr-3 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"></path></svg>
+                                <a href="#" id="view-notes-btn"
+                                    class="relative flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                                    role="menuitem">
+                                    <svg class="w-5 h-5 mr-3 text-gray-500" fill="none" stroke="currentColor"
+                                        viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z">
+                                        </path>
+                                    </svg>
                                     View Private Notes
                                     <div id="private-notes-dot" class="notification-dot hidden"></div>
                                 </a>
                             </div>
                         </div>
                     </div>
-                      <div id="employee-controls" class="hidden items-center space-x-2">
-                        <button id="my-calendar-btn" class="text-white font-semibold py-2 px-4 rounded-md hover:bg-cyan-700 transition text-sm">My Calendar</button>
-                        <button id="send-note-to-admin-btn" class="text-white font-semibold py-2 px-4 rounded-md hover:bg-cyan-700 transition text-sm">Send Note to Admin</button>
+                    <div id="employee-controls" class="hidden items-center space-x-2">
+                        <button id="my-calendar-btn"
+                            class="text-white font-semibold py-2 px-4 rounded-md hover:bg-cyan-700 transition text-sm">My
+                            Calendar</button>
+                        <button id="send-note-to-admin-btn"
+                            class="text-white font-semibold py-2 px-4 rounded-md hover:bg-cyan-700 transition text-sm">Send
+                            Note to Admin</button>
                     </div>
                 </div>
 
                 <h1 class="text-2xl sm:text-3xl font-bold text-white text-center flex-grow">Team Task Manager</h1>
-                
+
                 <div class="flex items-center space-x-4">
-                      <span id="user-name-display" class="text-white font-semibold"></span>
-                      <button id="notifications-btn" class="relative text-white p-2 rounded-full hover:bg-cyan-600 transition">
-                           <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" /></svg>
-                          <div id="notification-dot" class="notification-dot hidden"></div>
-                      </button>
-                    <button id="logout-btn" class="text-white font-bold py-2 px-4 rounded-md hover:bg-cyan-600 transition">Logout</button>
+                    <span id="user-name-display" class="text-white font-semibold"></span>
+                    <button id="notifications-btn"
+                        class="relative text-white p-2 rounded-full hover:bg-cyan-600 transition">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
+                            stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
+                        </svg>
+                        <div id="notification-dot" class="notification-dot hidden"></div>
+                    </button>
+                    <button id="logout-btn"
+                        class="text-white font-bold py-2 px-4 rounded-md hover:bg-cyan-600 transition">Logout</button>
                 </div>
             </header>
 
             <div class="p-2 bg-gray-50 border-b">
                 <nav id="employee-nav" class="flex items-center space-x-2 overflow-x-auto pb-1">
-                    </nav>
+                </nav>
             </div>
 
             <div class="p-4 flex flex-col sm:flex-row justify-between items-center gap-4 bg-gray-50 border-b">
-                 <div class="flex items-center space-x-4">
-                      <div class="flex items-center">
-                          <label for="month-select" class="font-semibold text-sm mr-2 text-gray-600">Month:</label>
-                          <select id="month-select" class="input-field"></select>
-                      </div>
-                      <div id="date-filter-container" class="flex items-center">
-                           <label for="date-filter" class="font-semibold text-sm mr-2 text-gray-600">Date:</label>
-                           <input type="date" id="date-filter" class="input-field">
-                           <button id="clear-date-filter" class="ml-2 text-sm text-gray-500 hover:text-gray-700">&times;</button>
-                      </div>
-                      <div id="save-status" class="text-sm text-green-600 font-medium opacity-0">Saved</div>
-                 </div>
-                 <div class="flex items-center gap-4">
-                      <button id="download-report-btn" class="hidden w-full sm:w-auto bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-md shadow-sm transition">Download Report</button>
-                    <button id="addRowBtn" class="w-full sm:w-auto bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-md shadow-sm transition">Add Entry</button>
+                <div class="flex items-center space-x-4">
+                    <div class="flex items-center">
+                        <label for="month-select" class="font-semibold text-sm mr-2 text-gray-600">Month:</label>
+                        <select id="month-select" class="input-field"></select>
+                    </div>
+                    <div id="date-filter-container" class="flex items-center">
+                        <label for="date-filter" class="font-semibold text-sm mr-2 text-gray-600">Date:</label>
+                        <input type="date" id="date-filter" class="input-field">
+                        <button id="clear-date-filter"
+                            class="ml-2 text-sm text-gray-500 hover:text-gray-700">&times;</button>
+                    </div>
+                    <div id="save-status" class="text-sm text-green-600 font-medium opacity-0">Saved</div>
+                </div>
+                <div class="flex items-center gap-4">
+                    <button id="download-report-btn"
+                        class="hidden w-full sm:w-auto bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-md shadow-sm transition">Download
+                        Report</button>
+                    <button id="addRowBtn"
+                        class="w-full sm:w-auto bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-md shadow-sm transition">Add
+                        Entry</button>
                 </div>
             </div>
 
@@ -168,20 +240,40 @@
                 <table class="w-full">
                     <thead class="bg-gray-100">
                         <tr>
-                            <th class="p-3 text-left text-xs font-bold text-gray-600 uppercase tracking-wider w-[130px]">Date & Day</th>
-                            <th class="p-3 text-left text-xs font-bold text-gray-600 uppercase tracking-wider employee-col hidden w-[150px]">Employee</th>
-                            <th class="p-3 text-center text-xs font-bold text-gray-600 uppercase tracking-wider w-[40px]">#</th>
-                            <th class="p-3 text-left text-xs font-bold text-gray-600 uppercase tracking-wider w-1/3">Task</th>
-                            <th class="p-3 text-left text-xs font-bold text-gray-600 uppercase tracking-wider">Notes</th>
-                            <th class="p-3 text-left text-xs font-bold text-gray-600 uppercase tracking-wider submission-col w-[160px]">Submission Link</th>
-                            <th class="p-3 text-left text-xs font-bold text-gray-600 uppercase tracking-wider w-[120px]">Status</th>
-                            <th class="p-3 text-left text-xs font-bold text-gray-600 uppercase tracking-wider w-[140px]">Time Tracking</th>
-                            <th class="p-3 text-center text-xs font-bold text-gray-600 uppercase tracking-wider w-[80px]">Day Actions</th>
-                            <th class="p-3 text-center text-xs font-bold text-gray-600 uppercase tracking-wider w-[50px]"></th>
+                            <th
+                                class="p-3 text-left text-xs font-bold text-gray-600 uppercase tracking-wider w-[130px]">
+                                Date & Day</th>
+                            <th
+                                class="p-3 text-left text-xs font-bold text-gray-600 uppercase tracking-wider employee-col hidden w-[150px]">
+                                Employee</th>
+                            <th
+                                class="p-3 text-center text-xs font-bold text-gray-600 uppercase tracking-wider w-[40px]">
+                                #</th>
+                            <th class="p-3 text-left text-xs font-bold text-gray-600 uppercase tracking-wider w-1/3">
+                                Task</th>
+                            <th class="p-3 text-left text-xs font-bold text-gray-600 uppercase tracking-wider">Notes
+                            </th>
+                            <th
+                                class="p-3 text-left text-xs font-bold text-gray-600 uppercase tracking-wider submission-col w-[160px]">
+                                Submission Link</th>
+                            <th
+                                class="p-3 text-left text-xs font-bold text-gray-600 uppercase tracking-wider w-[120px]">
+                                Status</th>
+                            <th
+                                class="p-3 text-left text-xs font-bold text-gray-600 uppercase tracking-wider w-[140px]">
+                                Time Tracking</th>
+                            <th
+                                class="p-3 text-center text-xs font-bold text-gray-600 uppercase tracking-wider w-[80px]">
+                                Day Actions</th>
+                            <th
+                                class="p-3 text-center text-xs font-bold text-gray-600 uppercase tracking-wider w-[50px]">
+                            </th>
                         </tr>
                     </thead>
                     <tbody id="task-table-body" class="divide-y divide-gray-200">
-                        <tr id="loading-row"><td colspan="10" class="text-center p-8 text-gray-500">Loading entries...</td></tr>
+                        <tr id="loading-row">
+                            <td colspan="10" class="text-center p-8 text-gray-500">Loading entries...</td>
+                        </tr>
                     </tbody>
                 </table>
             </div>
@@ -190,10 +282,13 @@
 
     <div id="login-modal" class="fixed inset-0 bg-gray-100 flex items-center justify-center z-50">
         <div class="w-full max-w-md p-8 space-y-8 bg-white shadow-lg rounded-xl">
-            <div><h2 class="mt-6 text-center text-3xl font-extrabold text-gray-900">Sign in to your account</h2></div>
+            <div>
+                <h2 class="mt-6 text-center text-3xl font-extrabold text-gray-900">Sign in to your account</h2>
+            </div>
             <form id="login-form" class="mt-8 space-y-6">
                 <div>
-                    <label for="login-employee-select" class="block text-sm font-medium text-gray-700">Select Role</label>
+                    <label for="login-employee-select" class="block text-sm font-medium text-gray-700">Select
+                        Role</label>
                     <select id="login-employee-select" class="input-field mt-1 w-full"></select>
                 </div>
                 <div>
@@ -202,74 +297,101 @@
                 </div>
                 <p id="login-error-msg" class="text-red-500 text-sm mt-2 hidden">Incorrect username or password.</p>
                 <div>
-                    <button type="submit" class="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-cyan-600 hover:bg-cyan-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-cyan-500">Sign in</button>
+                    <button type="submit"
+                        class="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-cyan-600 hover:bg-cyan-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-cyan-500">Sign
+                        in</button>
                 </div>
             </form>
         </div>
     </div>
 
-    <div id="confirmation-modal" class="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full hidden z-50">
+    <div id="confirmation-modal"
+        class="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full hidden z-50">
         <div class="relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white">
             <div class="mt-3 text-center">
                 <div class="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-red-100">
-                    <svg class="h-6 w-6 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
+                    <svg class="h-6 w-6 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                        xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z">
+                        </path>
+                    </svg>
                 </div>
                 <h3 id="confirmation-title" class="text-lg leading-6 font-medium text-gray-900 mt-4">Confirm Action</h3>
-                <div class="mt-2 px-7 py-3"><p id="modal-text" class="text-sm text-gray-500"></p></div>
+                <div class="mt-2 px-7 py-3">
+                    <p id="modal-text" class="text-sm text-gray-500"></p>
+                </div>
                 <div class="items-center px-4 py-3 space-x-4">
-                    <button id="modal-cancel-btn" class="px-4 py-2 bg-gray-200 text-gray-800 rounded-md hover:bg-gray-300">Cancel</button>
-                    <button id="modal-confirm-btn" class="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700">Confirm</button>
+                    <button id="modal-cancel-btn"
+                        class="px-4 py-2 bg-gray-200 text-gray-800 rounded-md hover:bg-gray-300">Cancel</button>
+                    <button id="modal-confirm-btn"
+                        class="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700">Confirm</button>
                 </div>
             </div>
         </div>
     </div>
-    
-    <div id="manage-employees-modal" class="fixed inset-0 bg-gray-600 bg-opacity-75 overflow-y-auto h-full w-full hidden z-50">
+
+    <div id="manage-employees-modal"
+        class="fixed inset-0 bg-gray-600 bg-opacity-75 overflow-y-auto h-full w-full hidden z-50">
         <div class="relative top-1/4 mx-auto p-8 border w-full max-w-2xl shadow-lg rounded-md bg-white">
             <h3 class="text-2xl font-bold text-center mb-6">Manage Employees</h3>
             <div class="mb-8 p-4 border rounded-lg">
                 <h4 class="text-lg font-semibold mb-3">Add New Employee</h4>
                 <form id="add-employee-form" class="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                    <div><label for="new-employee-name" class="block text-sm font-medium text-gray-700">Name</label><input type="text" id="new-employee-name" required class="input-field mt-1"></div>
-                    <div><label for="new-employee-password" class="block text-sm font-medium text-gray-700">Password</label><input type="text" id="new-employee-password" required class="input-field mt-1"></div>
-                    <div class="self-end"><button type="submit" class="w-full py-2 px-4 bg-blue-600 text-white rounded-md hover:bg-blue-700">Add Employee</button></div>
+                    <div><label for="new-employee-name"
+                            class="block text-sm font-medium text-gray-700">Name</label><input type="text"
+                            id="new-employee-name" required class="input-field mt-1"></div>
+                    <div><label for="new-employee-password"
+                            class="block text-sm font-medium text-gray-700">Password</label><input type="text"
+                            id="new-employee-password" required class="input-field mt-1"></div>
+                    <div class="self-end"><button type="submit"
+                            class="w-full py-2 px-4 bg-blue-600 text-white rounded-md hover:bg-blue-700">Add
+                            Employee</button></div>
                 </form>
             </div>
             <div>
                 <h4 class="text-lg font-semibold mb-3">Current Employees</h4>
                 <div id="employee-management-list" class="space-y-3 max-h-60 overflow-y-auto"></div>
             </div>
-            <div class="mt-6 text-right"><button type="button" id="manage-employees-close-btn" class="px-4 py-2 bg-gray-200 text-gray-800 rounded-md hover:bg-gray-300">Close</button></div>
+            <div class="mt-6 text-right"><button type="button" id="manage-employees-close-btn"
+                    class="px-4 py-2 bg-gray-200 text-gray-800 rounded-md hover:bg-gray-300">Close</button></div>
         </div>
     </div>
 
-    <div id="change-password-modal" class="fixed inset-0 bg-gray-600 bg-opacity-75 overflow-y-auto h-full w-full hidden z-50">
+    <div id="change-password-modal"
+        class="fixed inset-0 bg-gray-600 bg-opacity-75 overflow-y-auto h-full w-full hidden z-50">
         <div class="relative top-1/4 mx-auto p-8 border w-full max-w-md shadow-lg rounded-md bg-white">
             <h3 id="change-password-title" class="text-2xl font-bold text-center mb-6">Change Password</h3>
             <form id="change-password-form">
-                <label for="new-password-input" class="block text-sm font-medium text-gray-700 mb-2">New Password</label>
+                <label for="new-password-input" class="block text-sm font-medium text-gray-700 mb-2">New
+                    Password</label>
                 <input type="text" id="new-password-input" required class="input-field w-full">
                 <div class="mt-6 flex justify-end space-x-4">
-                    <button type="button" id="change-password-cancel-btn" class="px-4 py-2 bg-gray-200 text-gray-800 rounded-md hover:bg-gray-300">Cancel</button>
-                    <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700">Save Password</button>
+                    <button type="button" id="change-password-cancel-btn"
+                        class="px-4 py-2 bg-gray-200 text-gray-800 rounded-md hover:bg-gray-300">Cancel</button>
+                    <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700">Save
+                        Password</button>
                 </div>
             </form>
         </div>
     </div>
 
-    <div id="notifications-modal" class="fixed inset-0 bg-gray-600 bg-opacity-75 overflow-y-auto h-full w-full hidden z-50">
+    <div id="notifications-modal"
+        class="fixed inset-0 bg-gray-600 bg-opacity-75 overflow-y-auto h-full w-full hidden z-50">
         <div class="relative top-1/4 mx-auto p-8 border w-full max-w-lg shadow-lg rounded-md bg-white">
             <h3 class="text-2xl font-bold text-center mb-6">Notifications</h3>
             <div id="notification-list" class="space-y-4 max-h-80 overflow-y-auto">
-                </div>
+            </div>
             <div class="mt-6 text-right">
-                <button type="button" id="notifications-close-btn" class="px-4 py-2 bg-gray-200 text-gray-800 rounded-md hover:bg-gray-300">Close</button>
+                <button type="button" id="notifications-close-btn"
+                    class="px-4 py-2 bg-gray-200 text-gray-800 rounded-md hover:bg-gray-300">Close</button>
             </div>
         </div>
     </div>
 
-    <div id="send-notification-modal" class="fixed inset-0 bg-gray-600 bg-opacity-75 overflow-y-auto h-full w-full hidden z-50">
-         <div class="relative top-1/4 mx-auto p-8 border w-full max-w-lg shadow-lg rounded-md bg-white">
+    <div id="send-notification-modal"
+        class="fixed inset-0 bg-gray-600 bg-opacity-75 overflow-y-auto h-full w-full hidden z-50">
+        <div class="relative top-1/4 mx-auto p-8 border w-full max-w-lg shadow-lg rounded-md bg-white">
             <h3 class="text-2xl font-bold text-center mb-6">Send Notification</h3>
             <form id="send-notification-form">
                 <div>
@@ -281,8 +403,10 @@
                     <textarea id="notification-text-input" rows="4" required class="input-field mt-1 w-full"></textarea>
                 </div>
                 <div class="mt-6 flex justify-end space-x-4">
-                    <button type="button" id="send-notification-cancel-btn" class="px-4 py-2 bg-gray-200 text-gray-800 rounded-md hover:bg-gray-300">Cancel</button>
-                    <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700">Send</button>
+                    <button type="button" id="send-notification-cancel-btn"
+                        class="px-4 py-2 bg-gray-200 text-gray-800 rounded-md hover:bg-gray-300">Cancel</button>
+                    <button type="submit"
+                        class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700">Send</button>
                 </div>
             </form>
         </div>
@@ -292,17 +416,24 @@
         <div class="relative top-10 mx-auto p-5 border w-full max-w-4xl shadow-lg rounded-md bg-white">
             <div class="flex justify-between items-center mb-4">
                 <button id="prev-month-btn" class="p-2 rounded-full hover:bg-gray-200">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" /></svg>
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
+                        stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+                    </svg>
                 </button>
                 <h3 id="calendar-month-year" class="text-xl font-bold"></h3>
                 <button id="next-month-btn" class="p-2 rounded-full hover:bg-gray-200">
-                     <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" /></svg>
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
+                        stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                    </svg>
                 </button>
             </div>
             <div id="calendar-grid" class="grid grid-cols-7 gap-1 text-center">
-                </div>
+            </div>
             <div class="mt-6 text-right">
-                <button type="button" id="calendar-close-btn" class="px-4 py-2 bg-gray-200 text-gray-800 rounded-md hover:bg-gray-300">Close</button>
+                <button type="button" id="calendar-close-btn"
+                    class="px-4 py-2 bg-gray-200 text-gray-800 rounded-md hover:bg-gray-300">Close</button>
             </div>
         </div>
     </div>
@@ -311,10 +442,12 @@
         <div class="relative top-1/4 mx-auto p-5 border w-full max-w-md shadow-lg rounded-md bg-white">
             <h3 id="day-detail-title" class="text-lg font-medium text-gray-900 mb-4">Events for [Date]</h3>
             <div id="day-events-list" class="space-y-2 mb-4 max-h-48 overflow-y-auto">
-                </div>
-            <button id="add-new-event-btn" class="w-full py-2 px-4 bg-blue-600 text-white rounded-md hover:bg-blue-700">Add New Event</button>
+            </div>
+            <button id="add-new-event-btn"
+                class="w-full py-2 px-4 bg-blue-600 text-white rounded-md hover:bg-blue-700">Add New Event</button>
             <div class="mt-4 text-right">
-                 <button type="button" id="day-detail-close-btn" class="px-4 py-2 bg-gray-200 text-gray-800 rounded-md hover:bg-gray-300">Close</button>
+                <button type="button" id="day-detail-close-btn"
+                    class="px-4 py-2 bg-gray-200 text-gray-800 rounded-md hover:bg-gray-300">Close</button>
             </div>
         </div>
     </div>
@@ -330,20 +463,26 @@
                     <input type="text" id="event-title-input" required class="input-field mt-1 w-full">
                 </div>
                 <div class="mt-4">
-                    <label for="event-description-input" class="block text-sm font-medium text-gray-700">Description (optional)</label>
+                    <label for="event-description-input" class="block text-sm font-medium text-gray-700">Description
+                        (optional)</label>
                     <textarea id="event-description-input" rows="3" class="input-field mt-1 w-full"></textarea>
                 </div>
-                <div class="items-center px-4 py-3 mt-4 sm:px-6 sm:flex sm:flex-row-reverse -mx-5 -mb-5 bg-gray-50 rounded-b-md">
-                    <button type="submit" class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-blue-600 text-base font-medium text-white hover:bg-blue-700 sm:ml-3 sm:w-auto sm:text-sm">Save Event</button>
-                    <button id="delete-event-btn" type="button" class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-red-600 text-base font-medium text-white hover:bg-red-700 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm hidden">Delete</button>
-                    <button type="button" id="event-form-cancel-btn" class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 sm:mt-0 sm:w-auto sm:text-sm">Cancel</button>
+                <div
+                    class="items-center px-4 py-3 mt-4 sm:px-6 sm:flex sm:flex-row-reverse -mx-5 -mb-5 bg-gray-50 rounded-b-md">
+                    <button type="submit"
+                        class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-blue-600 text-base font-medium text-white hover:bg-blue-700 sm:ml-3 sm:w-auto sm:text-sm">Save
+                        Event</button>
+                    <button id="delete-event-btn" type="button"
+                        class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-red-600 text-base font-medium text-white hover:bg-red-700 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm hidden">Delete</button>
+                    <button type="button" id="event-form-cancel-btn"
+                        class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 sm:mt-0 sm:w-auto sm:text-sm">Cancel</button>
                 </div>
             </form>
         </div>
     </div>
 
     <div id="send-note-modal" class="fixed inset-0 bg-gray-600 bg-opacity-75 overflow-y-auto h-full w-full hidden z-50">
-         <div class="relative top-1/4 mx-auto p-8 border w-full max-w-lg shadow-lg rounded-md bg-white">
+        <div class="relative top-1/4 mx-auto p-8 border w-full max-w-lg shadow-lg rounded-md bg-white">
             <h3 class="text-2xl font-bold text-center mb-6">Send a Private Note to Admin</h3>
             <form id="send-note-form">
                 <div class="mt-4">
@@ -351,20 +490,24 @@
                     <textarea id="private-note-input" rows="4" required class="input-field mt-1 w-full"></textarea>
                 </div>
                 <div class="mt-6 flex justify-end space-x-4">
-                    <button type="button" id="send-note-cancel-btn" class="px-4 py-2 bg-gray-200 text-gray-800 rounded-md hover:bg-gray-300">Cancel</button>
-                    <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700">Send Note</button>
+                    <button type="button" id="send-note-cancel-btn"
+                        class="px-4 py-2 bg-gray-200 text-gray-800 rounded-md hover:bg-gray-300">Cancel</button>
+                    <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700">Send
+                        Note</button>
                 </div>
             </form>
         </div>
     </div>
 
-    <div id="view-notes-modal" class="fixed inset-0 bg-gray-600 bg-opacity-75 overflow-y-auto h-full w-full hidden z-50">
+    <div id="view-notes-modal"
+        class="fixed inset-0 bg-gray-600 bg-opacity-75 overflow-y-auto h-full w-full hidden z-50">
         <div class="relative top-1/4 mx-auto p-8 border w-full max-w-2xl shadow-lg rounded-md bg-white">
             <h3 class="text-2xl font-bold text-center mb-6">Private Notes from Employees</h3>
             <div id="private-notes-list" class="space-y-4 max-h-80 overflow-y-auto">
-                </div>
+            </div>
             <div class="mt-6 text-right">
-                <button type="button" id="view-notes-close-btn" class="px-4 py-2 bg-gray-200 text-gray-800 rounded-md hover:bg-gray-300">Close</button>
+                <button type="button" id="view-notes-close-btn"
+                    class="px-4 py-2 bg-gray-200 text-gray-800 rounded-md hover:bg-gray-300">Close</button>
             </div>
         </div>
     </div>
@@ -378,17 +521,16 @@
         // --- Firebase Configuration ---
         // Using the hardcoded configuration from the 2nd version.
         const firebaseConfig = {
-            apiKey: "AIzaSyDVfMk-nRghSjmTZLXzBEd79gW91Xg41eA",
-            authDomain: "team-task-manager-38eb9.firebaseapp.com",
-            projectId: "team-task-manager-38eb9",
-            storageBucket: "team-task-manager-38eb9.firebasestorage.app",
-            messagingSenderId: "449761802928",
-            appId: "1:449761802928:web:e0930b7cb9160b51851975",
-            measurementId: "G-4D6ERW6RSF"
+            apiKey: "AIzaSyB6Hj2Wl4q0TVw0PvUmCSr6YtRhFaq5gvM",
+            authDomain: "task-manager-a2b6c.firebaseapp.com",
+            projectId: "task-manager-a2b6c",
+            storageBucket: "task-manager-a2b6c.firebasestorage.app",
+            messagingSenderId: "1059404138536",
+            appId: "1:1059404138536:web:dc2a7d9032978c48150d1d"
         };
-        
+
         const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-team-task-manager';
-        
+
         // --- DOM ELEMENTS ---
         const mainAppContainer = document.getElementById('main-app');
         const loginModal = document.getElementById('login-modal');
@@ -476,17 +618,17 @@
 
         // --- DATA & STATE ---
         const statuses = { 'Done': { color: 'bg-green-500' }, 'In Progress': { color: 'bg-yellow-500' }, 'On Hold': { color: 'bg-red-500' }, 'Working': { color: 'bg-blue-500' }, 'Not Fixed': { color: 'bg-gray-500' }, 'Pending': { color: 'bg-purple-500' }, 'Waiting For Confirmation': { color: 'bg-pink-500' } };
-        const dayStatuses = { 
-            'Present': { color: '' }, 
-            'On Leave': { color: 'bg-red-100 text-red-700' }, 
-            'Work from home': { color: 'bg-amber-100' }, 
-            'On Court': { color: 'bg-sky-100' }, 
+        const dayStatuses = {
+            'Present': { color: '' },
+            'On Leave': { color: 'bg-red-100 text-red-700' },
+            'Work from home': { color: 'bg-amber-100' },
+            'On Court': { color: 'bg-sky-100' },
             'Outside': { color: 'bg-fuchsia-100' },
             'Holiday': { color: 'bg-teal-100 text-teal-700' }
         };
-        
+
         let employeeCredentials = {};
-        
+
         let db, auth, userId, dailyEntriesCollectionRef, credentialsDocRef, notificationsCollectionRef, calendarEventsCollectionRef, privateNotesCollectionRef;
         let unsubscribeEntries = null, unsubscribeNotifications = null, unsubscribePrivateNotes = null;
         let activeEmployee = null;
@@ -531,7 +673,7 @@
                 // First-time setup with default credentials
                 const defaultCredentials = {
                     'Admin': 'pass1234',
-                    'Shariar': '12345', 'Hamza': '12345', 'Shezan': '12345', 
+                    'Shariar': '12345', 'Hamza': '12345', 'Shezan': '12345',
                     'Imtiaz': '12345', 'Shourav': '12345', 'Fahim': '12345'
                 };
                 await setDoc(credentialsDocRef, defaultCredentials);
@@ -558,16 +700,16 @@
                 loggedInUser = selectedUser;
                 isAdminView = (selectedUser === 'Admin');
                 activeEmployee = isAdminView ? 'All Employees' : loggedInUser;
-                
+
                 loginModal.classList.add('hidden');
                 mainAppContainer.classList.remove('hidden');
                 loginPasswordInput.value = '';
                 loginErrorMsg.classList.add('hidden');
-                
+
                 adminMenuContainer.classList.toggle('hidden', !isAdminView);
                 employeeControls.classList.toggle('hidden', isAdminView);
                 userNameDisplay.textContent = loggedInUser;
-                
+
                 startApp();
             } else {
                 loginErrorMsg.classList.remove('hidden');
@@ -581,7 +723,7 @@
             if (unsubscribeEntries) unsubscribeEntries();
             if (unsubscribeNotifications) unsubscribeNotifications();
             if (unsubscribePrivateNotes) unsubscribePrivateNotes();
-            
+
             mainAppContainer.classList.add('hidden');
             loginModal.classList.remove('hidden');
         }
@@ -603,16 +745,16 @@
             monthSelect.value = currentMonth;
             monthSelect.addEventListener('change', renderFilteredEntries);
             addRowBtn.addEventListener('click', handleAddEntry);
-            
+
             logoutBtn.addEventListener('click', (e) => { e.preventDefault(); handleLogout(); });
-            
+
             manageEmployeesBtn.addEventListener('click', (e) => { e.preventDefault(); openManageEmployeesModal(); });
             manageEmployeesCloseBtn.addEventListener('click', () => manageEmployeesModal.classList.add('hidden'));
             addEmployeeForm.addEventListener('submit', handleAddEmployee);
             changePasswordForm.addEventListener('submit', handleSavePassword);
             changePasswordCancelBtn.addEventListener('click', () => changePasswordModal.classList.add('hidden'));
             downloadReportBtn.addEventListener('click', handleDownloadReport);
-            
+
             const updateAddButtonText = () => {
                 if (dateFilterInput.value) {
                     addRowBtn.textContent = `Add Entry for ${dateFilterInput.value}`;
@@ -622,7 +764,7 @@
             };
             updateAddButtonText();
             dateFilterInput.addEventListener('input', updateAddButtonText);
-            
+
             clearDateFilterBtn.addEventListener('click', () => {
                 dateFilterInput.value = '';
                 updateAddButtonText();
@@ -635,7 +777,7 @@
             sendNotificationBtn.addEventListener('click', (e) => { e.preventDefault(); openSendNotificationModal(); });
             sendNotificationCancelBtn.addEventListener('click', () => sendNotificationModal.classList.add('hidden'));
             sendNotificationForm.addEventListener('submit', handleSendNotification);
-            
+
             myCalendarBtn.addEventListener('click', (e) => { e.preventDefault(); openCalendarModal(); });
             calendarCloseBtn.addEventListener('click', () => calendarModal.classList.add('hidden'));
             prevMonthBtn.addEventListener('click', showPreviousMonth);
@@ -683,7 +825,7 @@
         function renderFilteredEntries() {
             loadingRow.style.display = 'none';
             taskTableBody.innerHTML = '';
-            
+
             let filtered = allEntries;
 
             if (activeEmployee !== 'All Employees') {
@@ -697,52 +839,52 @@
                 const selectedMonth = monthSelect.value.toLowerCase();
                 filtered = filtered.filter(entry => {
                     if (!entry.date) return false;
-                    const entryDate = new Date(entry.date + 'T00:00:00'); 
+                    const entryDate = new Date(entry.date + 'T00:00:00');
                     return entryDate.toLocaleString('en-US', { month: 'long' }).toLowerCase() === selectedMonth;
                 });
             }
-            
+
             filtered.sort((a, b) => new Date(a.date) - new Date(b.date));
-            
+
             const isAllEmpView = isAdminView && activeEmployee === 'All Employees';
             document.querySelectorAll('.employee-col').forEach(col => col.classList.toggle('hidden', !isAllEmpView));
             document.querySelectorAll('.submission-col').forEach(col => col.classList.toggle('hidden', !isAdminView && !isAllEmpView));
-            
+
             if (isAllEmpView) {
-                 document.querySelectorAll('.submission-col').forEach(col => col.classList.remove('hidden'));
+                document.querySelectorAll('.submission-col').forEach(col => col.classList.remove('hidden'));
             } else if (!isAdminView) {
-                 document.querySelectorAll('.submission-col').forEach(col => col.classList.remove('hidden'));
+                document.querySelectorAll('.submission-col').forEach(col => col.classList.remove('hidden'));
             }
 
 
-            if(filtered.length === 0){
+            if (filtered.length === 0) {
                 let colspan = isAllEmpView ? 10 : 9;
                 taskTableBody.innerHTML = `<tr><td colspan="${colspan}" class="text-center p-8 text-gray-500">No entries found.</td></tr>`;
             } else {
-                 let lastDate = null;
-                 let lastEmployee = null;
-                 filtered.forEach(entry => {
+                let lastDate = null;
+                let lastEmployee = null;
+                filtered.forEach(entry => {
                     const isNewDay = entry.date !== lastDate || entry.employee !== lastEmployee;
                     createDayGroup(entry, isNewDay);
                     lastDate = entry.date;
                     lastEmployee = entry.employee;
-                 });
+                });
             }
         }
 
         function createDayGroup(entry, isNewDay) {
             const dayStatus = entry.dayStatus || 'Present';
             const statusInfo = dayStatuses[dayStatus] || { color: '' };
-            
+
             const createRowForStatus = () => {
                 let colspan = 6;
-                
+
                 const tr = document.createElement('tr');
-                if(isNewDay) tr.classList.add('day-separator');
+                if (isNewDay) tr.classList.add('day-separator');
                 if (statusInfo.color) tr.className += ' ' + statusInfo.color;
                 tr.append(createDateCell(entry, 1, isNewDay));
                 if (isAdminView && activeEmployee === 'All Employees') {
-                   tr.append(createDayGroupCell(entry.employee, 1));
+                    tr.append(createDayGroupCell(entry.employee, 1));
                 }
                 const statusCell = createDayGroupCell('', 1, `font-semibold text-center`);
                 statusCell.colSpan = colspan;
@@ -759,29 +901,29 @@
             }
 
             const numTasks = entry.tasks ? entry.tasks.length : 0;
-            
+
             if (numTasks === 0 && (dayStatus !== 'Present')) {
                 createRowForStatus();
                 return;
             }
-            
+
             if (numTasks === 0 && dayStatus === 'Present') return;
 
             entry.tasks.forEach((task, index) => {
                 const tr = document.createElement('tr');
                 tr.dataset.dayId = entry.id;
                 tr.dataset.taskId = task.id;
-                
+
                 if (statusInfo.color) tr.classList.add(statusInfo.color.split(' ')[0]);
 
                 if (index === 0) {
-                    if(isNewDay) tr.classList.add('day-separator');
+                    if (isNewDay) tr.classList.add('day-separator');
                     tr.append(createDateCell(entry, numTasks, isNewDay));
                     if (isAdminView && activeEmployee === 'All Employees') {
                         tr.append(createDayGroupCell(entry.employee, numTasks));
                     }
                 }
-                
+
                 tr.append(
                     createTaskNumberCell(index + 1),
                     createCell(task.task, 'task', entry.id, task),
@@ -800,7 +942,7 @@
                 taskTableBody.appendChild(tr);
             });
         }
-        
+
         function createDayGroupCell(content, rowspan, className = '') {
             const td = document.createElement('td');
             td.className = `p-3 text-sm ${className}`;
@@ -811,7 +953,7 @@
 
         function getLockIcon(isLocked) {
             const iconClass = isLocked ? "text-gray-600" : "text-gray-500";
-            const path = isLocked 
+            const path = isLocked
                 ? `<path fill-rule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clip-rule="evenodd" />`
                 : `<path d="M10 2a5 5 0 00-5 5v2a2 2 0 00-2 2v5a2 2 0 002 2h10a2 2 0 002-2v-5a2 2 0 00-2-2V7a5 5 0 00-5-5zm0 8a1 1 0 100-2 1 1 0 000 2z" />`;
             return `<svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 ${iconClass}" viewBox="0 0 20 20" fill="currentColor">${path}</svg>`;
@@ -819,7 +961,7 @@
 
         function createDateCell(entry, rowspan, isNewDay) {
             const td = createDayGroupCell('', rowspan);
-            
+
             const dateInputWrapper = document.createElement('div');
             dateInputWrapper.className = 'flex items-center space-x-1 mb-1';
 
@@ -834,7 +976,7 @@
             } else {
                 dateInput.addEventListener('change', (e) => handleDateChange(e.target, e.target.value, entry.id));
             }
-            
+
             dateInputWrapper.appendChild(dateInput);
 
             if (isAdminView) {
@@ -853,7 +995,7 @@
             td.append(dateInputWrapper, dayDisplay);
             return td;
         }
-        
+
         function createTaskNumberCell(number) {
             const td = document.createElement('td');
             td.className = 'p-3 text-sm text-center text-gray-500 font-medium';
@@ -863,20 +1005,20 @@
 
         function createTimeCell(entry, rowspan) {
             const td = createDayGroupCell('', rowspan);
-            
+
             const createTimeInput = (timeValue, fieldName, lockState) => {
                 const wrapper = document.createElement('div');
                 wrapper.className = 'flex items-center space-x-1 mb-1';
                 const input = document.createElement('input');
-                input.type = 'time'; 
+                input.type = 'time';
                 input.value = timeValue || '';
                 input.className = 'input-field flex-grow';
-                
+
                 const lockBtn = document.createElement('button');
                 lockBtn.className = 'h-6 w-6 flex items-center justify-center rounded-full hover:bg-gray-200';
-                lockBtn.title = `Lock/Unlock ${fieldName.replace('Time','')} time`;
+                lockBtn.title = `Lock/Unlock ${fieldName.replace('Time', '')} time`;
                 lockBtn.innerHTML = getLockIcon(lockState);
-                
+
                 if (isAdminView) {
                     lockBtn.addEventListener('click', () => handleToggleLock(entry.id, `${fieldName}Locked`, !lockState));
                 } else {
@@ -893,7 +1035,7 @@
             const workingHoursDisplay = document.createElement('div');
             workingHoursDisplay.className = 'text-xs text-gray-700 font-bold p-1 text-center';
             workingHoursDisplay.textContent = entry.workingHours || '0h 0m';
-            
+
             const recalculate = () => {
                 const workingHours = calculateWorkingHours(entryInput.value, exitInput.value);
                 workingHoursDisplay.textContent = workingHours;
@@ -940,7 +1082,7 @@
                 lockBtn.addEventListener('click', () => handleToggleTaskFieldLock(dayId, task.id, field, !task[`${field}LockedByAdmin`]));
                 wrapper.appendChild(lockBtn);
             }
-            
+
             td.appendChild(wrapper);
             return td;
         }
@@ -948,7 +1090,7 @@
         function createSubmissionLinkCell(task, dayId) {
             const td = document.createElement('td');
             td.className = 'p-3 text-sm submission-col';
-            
+
             const wrapper = document.createElement('div');
             wrapper.className = 'flex flex-col space-y-1';
 
@@ -961,7 +1103,7 @@
             input.placeholder = 'Paste link here...';
             input.className = 'input-field w-full text-xs flex-grow';
             input.addEventListener('blur', (e) => handleUpdateTask(dayId, task.id, 'submissionLink', e.target.value));
-            
+
             const isLockedForEmployee = task.submissionLinkLockedByAdmin && !isAdminView;
             input.disabled = isLockedForEmployee;
             if (isLockedForEmployee) {
@@ -995,9 +1137,9 @@
         }
 
         function createStatusCell(task, dayId) {
-            const td = document.createElement('td'); 
+            const td = document.createElement('td');
             td.className = 'p-3 text-sm';
-            
+
             const wrapper = document.createElement('div');
             wrapper.className = 'flex items-center space-x-1';
 
@@ -1005,7 +1147,7 @@
             select.className = 'status-select w-full flex-grow';
             for (const key in statuses) {
                 const option = document.createElement('option');
-                option.value = key; 
+                option.value = key;
                 option.textContent = key;
                 if (key === task.status) option.selected = true;
                 select.appendChild(option);
@@ -1019,9 +1161,9 @@
                 select.disabled = true;
                 select.title = "This status was locked by an admin and cannot be changed.";
             } else {
-                select.addEventListener('change', (e) => { 
-                    setSelectColor(e.target.value); 
-                    handleUpdateTask(dayId, task.id, 'status', e.target.value); 
+                select.addEventListener('change', (e) => {
+                    setSelectColor(e.target.value);
+                    handleUpdateTask(dayId, task.id, 'status', e.target.value);
                 });
             }
 
@@ -1042,13 +1184,13 @@
 
         function createDayActionCell(entry, rowspan) {
             const td = createDayGroupCell('', rowspan, 'text-center');
-            
+
             const addBtn = document.createElement('button');
             addBtn.className = 'h-8 w-8 inline-flex items-center justify-center text-green-500 rounded-full hover:bg-green-100';
             addBtn.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" /></svg>`;
             addBtn.title = 'Add a task to this day';
             addBtn.addEventListener('click', () => handleAddTaskToDay(entry.id));
-            
+
             const deleteBtn = document.createElement('button');
             deleteBtn.className = 'h-8 w-8 inline-flex items-center justify-center text-red-500 rounded-full hover:bg-red-100 mt-2';
             deleteBtn.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>`;
@@ -1061,7 +1203,7 @@
             }
 
             td.append(addBtn, deleteBtn);
-            
+
             const statusWrapper = document.createElement('div');
             statusWrapper.className = 'flex items-center space-x-1 mt-2';
 
@@ -1076,7 +1218,7 @@
                 }
                 dayStatusSelect.appendChild(option);
             });
-            
+
             if (!isAdminView && entry.dayStatusLockedByAdmin) {
                 dayStatusSelect.disabled = true;
                 dayStatusSelect.title = "This status was set by an admin and cannot be changed.";
@@ -1092,18 +1234,18 @@
                     updateDoc(doc(dailyEntriesCollectionRef, entry.id), updateData).then(showSaveStatus);
                 });
             }
-            
+
             statusWrapper.appendChild(dayStatusSelect);
 
             if (isAdminView) {
-                 const lockBtn = document.createElement('button');
+                const lockBtn = document.createElement('button');
                 lockBtn.className = 'h-6 w-6 flex-shrink-0 flex items-center justify-center rounded-full hover:bg-gray-200';
                 lockBtn.title = `Lock/Unlock Day Status`;
                 lockBtn.innerHTML = getLockIcon(entry.dayStatusLockedByAdmin);
                 lockBtn.addEventListener('click', () => handleToggleDayStatusLock(entry.id, !entry.dayStatusLockedByAdmin));
                 statusWrapper.appendChild(lockBtn);
             }
-            
+
             td.appendChild(statusWrapper);
 
             return td;
@@ -1111,7 +1253,7 @@
 
         function createTaskActionCell(dayId, task) {
             const td = document.createElement('td'); td.className = 'p-3 text-sm text-center';
-            
+
             if (isAdminView || !task.assignedByAdmin) {
                 const deleteBtn = document.createElement('button');
                 deleteBtn.className = 'h-6 w-6 flex items-center justify-center text-red-500 rounded-full hover:bg-red-100';
@@ -1128,13 +1270,13 @@
             }
             return td;
         }
-        
+
         async function handleAddEntry() {
             if (activeEmployee === 'All Employees') {
                 showConfirmationModal("Please select a specific employee before adding an entry.", () => hideConfirmationModal());
                 return;
             }
-            
+
             const selectedDateString = dateFilterInput.value;
             const dateToUse = selectedDateString ? new Date(selectedDateString + 'T00:00:00') : new Date();
 
@@ -1148,37 +1290,37 @@
             const docRef = doc(dailyEntriesCollectionRef, docId);
             const docSnap = await getDoc(docRef);
 
-            const newTask = { 
-                id: crypto.randomUUID(), 
-                task: '', 
-                notes: '', 
-                status: 'Pending', 
+            const newTask = {
+                id: crypto.randomUUID(),
+                task: '',
+                notes: '',
+                status: 'Pending',
                 submissionLink: '',
                 submissionLinkLockedByAdmin: false,
-                assignedByAdmin: isAdminView, 
-                taskLockedByAdmin: false, 
-                notesLockedByAdmin: false, 
-                statusLockedByAdmin: false 
+                assignedByAdmin: isAdminView,
+                taskLockedByAdmin: false,
+                notesLockedByAdmin: false,
+                statusLockedByAdmin: false
             };
 
             if (docSnap.exists()) {
                 handleAddTaskToDay(docId);
                 showConfirmationModal(`An entry for ${dateString} already exists. A new task has been added to it.`, () => hideConfirmationModal(), "Info");
             } else {
-                const newEntry = { 
-                    date: dateString, 
-                    day: dayString, 
-                    employee: activeEmployee, 
-                    tasks: [newTask], 
-                    entryTime: '', 
-                    exitTime: '', 
-                    workingHours: '0h 0m', 
-                    createdAt: new Date(), 
-                    entryTimeLocked: false, 
-                    exitTimeLocked: false, 
-                    dayStatus: 'Present', 
-                    dayStatusLockedByAdmin: false, 
-                    dateLockedByAdmin: false 
+                const newEntry = {
+                    date: dateString,
+                    day: dayString,
+                    employee: activeEmployee,
+                    tasks: [newTask],
+                    entryTime: '',
+                    exitTime: '',
+                    workingHours: '0h 0m',
+                    createdAt: new Date(),
+                    entryTimeLocked: false,
+                    exitTimeLocked: false,
+                    dayStatus: 'Present',
+                    dayStatusLockedByAdmin: false,
+                    dateLockedByAdmin: false
                 };
                 await setDoc(docRef, newEntry);
                 showSaveStatus();
@@ -1188,19 +1330,19 @@
         async function handleAddTaskToDay(dayId) {
             const docRef = doc(dailyEntriesCollectionRef, dayId);
             const docSnap = await getDoc(docRef);
-            if(docSnap.exists()){
+            if (docSnap.exists()) {
                 const entry = docSnap.data();
-                const newTask = { 
-                    id: crypto.randomUUID(), 
-                    task: '', 
-                    notes: '', 
-                    status: 'Pending', 
+                const newTask = {
+                    id: crypto.randomUUID(),
+                    task: '',
+                    notes: '',
+                    status: 'Pending',
                     submissionLink: '',
                     submissionLinkLockedByAdmin: false,
-                    assignedByAdmin: isAdminView, 
-                    taskLockedByAdmin: false, 
-                    notesLockedByAdmin: false, 
-                    statusLockedByAdmin: false 
+                    assignedByAdmin: isAdminView,
+                    taskLockedByAdmin: false,
+                    notesLockedByAdmin: false,
+                    statusLockedByAdmin: false
                 };
                 const newTasks = [...(entry.tasks || []), newTask];
                 await updateDoc(docRef, { tasks: newTasks, dayStatus: 'Present' });
@@ -1215,7 +1357,7 @@
 
             const entryData = oldDocSnap.data();
             const newDocId = `${newDateString}_${entryData.employee}`;
-            
+
             if (newDocId === oldDocId) return;
 
             const newDocRef = doc(dailyEntriesCollectionRef, newDocId);
@@ -1228,11 +1370,11 @@
             }
 
             const newDayString = new Date(newDateString + 'T00:00:00').toLocaleDateString('en-US', { weekday: 'long' });
-            
+
             const batch = writeBatch(db);
             batch.delete(oldDocRef);
             batch.set(newDocRef, { ...entryData, date: newDateString, day: newDayString });
-            
+
             try {
                 await batch.commit();
                 showSaveStatus();
@@ -1255,7 +1397,7 @@
             await updateDoc(doc(dailyEntriesCollectionRef, dayId), { dateLockedByAdmin: lockState });
             showSaveStatus();
         }
-        
+
         async function handleToggleDayStatusLock(dayId, lockState) {
             await updateDoc(doc(dailyEntriesCollectionRef, dayId), { dayStatusLockedByAdmin: lockState });
             showSaveStatus();
@@ -1297,14 +1439,14 @@
                 const entry = docSnap.data();
                 const newTasks = entry.tasks.filter(t => t.id !== taskId);
                 if (newTasks.length === 0) {
-                     handleDeleteDay(dayId);
+                    handleDeleteDay(dayId);
                 } else {
                     await updateDoc(docRef, { tasks: newTasks });
                     showSaveStatus();
                 }
             }
         }
-        
+
         function renderEmployeeTabs() {
             employeeNav.innerHTML = '';
             if (isAdminView) {
@@ -1318,28 +1460,28 @@
 
         function createEmployeeTab(name) {
             const tab = document.createElement('a'); tab.href = '#'; tab.className = 'employee-nav-item whitespace-nowrap'; tab.textContent = `${name}`;
-            tab.addEventListener('click', (e) => { 
-                e.preventDefault(); 
+            tab.addEventListener('click', (e) => {
+                e.preventDefault();
                 activeEmployee = name;
                 updateActiveTab(name);
-                renderFilteredEntries(); 
+                renderFilteredEntries();
             });
             return tab;
         }
 
-        function updateActiveTab(employeeName) { 
+        function updateActiveTab(employeeName) {
             addRowBtn.disabled = employeeName === 'All Employees';
             downloadReportBtn.classList.toggle('hidden', !isAdminView);
-            employeeNav.querySelectorAll('.employee-nav-item').forEach(tab => { 
-                tab.classList.toggle('active', tab.textContent === employeeName); 
-            }); 
+            employeeNav.querySelectorAll('.employee-nav-item').forEach(tab => {
+                tab.classList.toggle('active', tab.textContent === employeeName);
+            });
         }
         function showSaveStatus() { clearTimeout(saveStatusTimeout); saveStatus.style.opacity = 1; saveStatusTimeout = setTimeout(() => { saveStatus.style.opacity = 0; }, 2000); }
         let confirmAction = null; function showConfirmationModal(text, onConfirm, title = "Confirm Action") { confirmationTitle.textContent = title; modalText.textContent = text; confirmAction = onConfirm; confirmationModal.classList.remove('hidden'); } function hideConfirmationModal() { confirmAction = null; confirmationModal.classList.add('hidden'); }
         modalConfirmBtn.addEventListener('click', () => { if (confirmAction) confirmAction(); hideConfirmationModal(); }); modalCancelBtn.addEventListener('click', hideConfirmationModal);
         function populateMonths() { ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"].forEach(m => monthSelect.add(new Option(m, m.toUpperCase()))); }
         function calculateWorkingHours(entry, exit) { if (!entry || !exit) return '0h 0m'; const entryDate = new Date(`1970-01-01T${entry}`); let exitDate = new Date(`1970-01-01T${exit}`); if (exitDate < entryDate) exitDate.setDate(exitDate.getDate() + 1); const diffMs = exitDate - entryDate; if (isNaN(diffMs) || diffMs < 0) return 'Invalid'; const diffHours = Math.floor(diffMs / 3600000); const diffMins = Math.floor((diffMs % 3600000) / 60000); return `${diffHours}h ${diffMins}m`; }
-        
+
         // --- ADMIN EMPLOYEE MANAGEMENT ---
         function openManageEmployeesModal() {
             renderEmployeeManagementList();
@@ -1351,7 +1493,7 @@
             Object.keys(employeeCredentials).filter(name => name !== 'Admin').sort().forEach(name => {
                 const div = document.createElement('div');
                 div.className = 'grid grid-cols-3 gap-4 items-center p-2 border rounded-md';
-                
+
                 const nameSpan = document.createElement('span');
                 nameSpan.className = 'font-medium';
                 nameSpan.textContent = name;
@@ -1380,7 +1522,7 @@
                 changePassBtn.title = 'Change Password';
                 changePassBtn.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-500" viewBox="0 0 20 20" fill="currentColor"><path d="M17.414 2.586a2 2 0 00-2.828 0L7 10.172V13h2.828l7.586-7.586a2 2 0 000-2.828z" /><path fill-rule="evenodd" d="M2 6a2 2 0 012-2h4a1 1 0 010 2H4v10h10v-4a1 1 0 112 0v4a2 2 0 01-2 2H4a2 2 0 01-2-2V6z" clip-rule="evenodd" /></svg>`;
                 changePassBtn.onclick = () => showChangePasswordModal(name);
-                
+
                 const removeBtn = document.createElement('button');
                 removeBtn.className = 'p-1 hover:bg-gray-200 rounded-full';
                 removeBtn.title = 'Remove Employee';
@@ -1425,7 +1567,7 @@
                 const newCreds = { ...employeeCredentials, [employeeToUpdatePassword]: newPassword };
                 await setDoc(credentialsDocRef, newCreds);
                 employeeCredentials = newCreds;
-                
+
                 changePasswordModal.classList.add('hidden');
                 newPasswordInput.value = '';
                 renderEmployeeManagementList();
@@ -1438,18 +1580,18 @@
             showConfirmationModal(`Are you sure you want to remove ${employeeName}? This will remove their login and cannot be undone.`, async () => {
                 const newCreds = { ...employeeCredentials };
                 delete newCreds[employeeName];
-                
+
                 await setDoc(credentialsDocRef, newCreds);
                 employeeCredentials = newCreds;
-                
+
                 renderEmployeeManagementList();
                 setupLoginScreen();
                 renderEmployeeTabs();
-                
+
                 showConfirmationModal(`Employee "${employeeName}" has been removed.`, () => hideConfirmationModal(), "Success");
             });
         }
-        
+
         // --- REPORTING ---
         function handleDownloadReport() {
             const selectedMonth = monthSelect.value.toLowerCase();
@@ -1466,15 +1608,15 @@
             }
 
             let csvContent = "Date,Day,Employee,Day Status,Task #,Task,Notes,Submission Link,Status,Entry Time,Exit Time,Working Hours\n";
-            
+
             reportData.forEach(entry => {
                 const dayStatus = entry.dayStatus || 'Present';
 
                 if (dayStatus === 'On Leave' || dayStatus === 'Holiday' || (entry.tasks.length === 0 && dayStatus !== 'Present')) {
                     const row = [
                         entry.date, entry.day, entry.employee, dayStatus, '', '', '', '', '',
-                        (dayStatus !== 'On Leave' && dayStatus !== 'Holiday') ? entry.entryTime : '', 
-                        (dayStatus !== 'On Leave' && dayStatus !== 'Holiday') ? entry.exitTime : '', 
+                        (dayStatus !== 'On Leave' && dayStatus !== 'Holiday') ? entry.entryTime : '',
+                        (dayStatus !== 'On Leave' && dayStatus !== 'Holiday') ? entry.exitTime : '',
                         (dayStatus !== 'On Leave' && dayStatus !== 'Holiday') ? entry.workingHours : ''
                     ].map(field => `"${String(field || '').replace(/"/g, '""')}"`).join(',');
                     csvContent += row + "\n";
@@ -1509,10 +1651,10 @@
 
         // --- NOTIFICATIONS ---
         function listenForNotifications() {
-            if(unsubscribeNotifications) unsubscribeNotifications();
+            if (unsubscribeNotifications) unsubscribeNotifications();
 
             const q = query(notificationsCollectionRef, where("recipients", "array-contains", loggedInUser));
-            
+
             unsubscribeNotifications = onSnapshot(q, (snapshot) => {
                 const sortedDocs = snapshot.docs.sort((a, b) => (b.data().createdAt?.toMillis() || 0) - (a.data().createdAt?.toMillis() || 0));
                 userNotifications = sortedDocs.map(doc => ({ id: doc.id, ...doc.data() }));
@@ -1598,7 +1740,7 @@
             sendNotificationForm.reset();
             showConfirmationModal("Notification sent successfully.", () => hideConfirmationModal(), "Success");
         }
-        
+
         // --- CALENDAR ---
         function openCalendarModal() {
             currentCalendarDate = new Date();
@@ -1630,7 +1772,7 @@
                 headerCell.textContent = day;
                 calendarGrid.appendChild(headerCell);
             });
-            
+
             const events = await fetchCalendarEvents(year, month);
             const firstDayOfMonth = new Date(year, month, 1).getDay();
             const daysInMonth = new Date(year, month + 1, 0).getDate();
@@ -1649,7 +1791,7 @@
                 dayNumber.className = 'font-semibold text-gray-700 self-start px-1';
                 dayNumber.textContent = day;
                 dayCell.appendChild(dayNumber);
-                
+
                 const dayEvents = events.filter(e => e.date === fullDateStr);
                 const eventsContainer = document.createElement('div');
                 eventsContainer.className = 'flex-grow overflow-y-auto text-left mt-1 space-y-1';
@@ -1680,10 +1822,10 @@
                 const eventDate = new Date(event.date + 'T00:00:00');
                 return eventDate.getFullYear() === year && eventDate.getMonth() === month;
             });
-            
+
             return filteredEvents;
         }
-        
+
         function openDayDetailModal(date, events) {
             currentDayDetail.date = date;
             dayDetailTitle.textContent = `Events for ${date}`;
@@ -1702,7 +1844,7 @@
             }
             dayDetailModal.classList.remove('hidden');
         }
-        
+
         function handleAddNewEventClick() {
             openEventForm(currentDayDetail.date, null);
         }
@@ -1711,7 +1853,7 @@
             dayDetailModal.classList.add('hidden');
             eventForm.reset();
             eventDateInput.value = date;
-            
+
             if (event) {
                 eventFormTitle.textContent = `Edit Event`;
                 eventIdInput.value = event.id;
@@ -1736,7 +1878,7 @@
                 description: eventDescriptionInput.value.trim(),
                 updatedAt: serverTimestamp()
             };
-            
+
             try {
                 if (eventId) {
                     const eventRef = doc(calendarEventsCollectionRef, eventId);
@@ -1746,14 +1888,14 @@
                     await addDoc(calendarEventsCollectionRef, eventData);
                 }
                 eventFormModal.classList.add('hidden');
-                renderCalendar(); 
+                renderCalendar();
                 showSaveStatus();
             } catch (error) {
                 console.error("Error saving event: ", error);
                 showConfirmationModal("Could not save the event.", () => hideConfirmationModal(), "Error");
             }
         }
-        
+
         async function handleDeleteEvent() {
             const eventId = eventIdInput.value;
             if (!eventId) return;
@@ -1762,7 +1904,7 @@
                 try {
                     await deleteDoc(doc(calendarEventsCollectionRef, eventId));
                     eventFormModal.classList.add('hidden');
-                    dayDetailModal.classList.add('hidden'); 
+                    dayDetailModal.classList.add('hidden');
                     renderCalendar();
                     showSaveStatus();
                 } catch (error) {
@@ -1796,7 +1938,7 @@
 
         function listenForPrivateNotes() {
             if (unsubscribePrivateNotes) unsubscribePrivateNotes();
-            
+
             unsubscribePrivateNotes = onSnapshot(privateNotesCollectionRef, (snapshot) => {
                 privateNotes = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
                 const hasUnread = privateNotes.some(note => !note.isRead);
@@ -1816,7 +1958,7 @@
                 privateNotesList.innerHTML = '<p class="text-center text-gray-500">No private notes found.</p>';
                 return;
             }
-            
+
             const sortedNotes = privateNotes.sort((a, b) => (b.timestamp?.toMillis() || 0) - (a.timestamp?.toMillis() || 0));
 
             sortedNotes.forEach(note => {
@@ -1828,7 +1970,7 @@
 
                 const header = document.createElement('div');
                 header.className = 'flex justify-between items-center mb-2';
-                
+
                 const sender = document.createElement('p');
                 sender.className = 'font-bold text-gray-800';
                 sender.textContent = note.employeeName;
@@ -1836,7 +1978,7 @@
                 const time = document.createElement('span');
                 time.className = 'text-xs text-gray-500';
                 time.textContent = note.timestamp?.toDate().toLocaleString() || 'sending...';
-                
+
                 header.append(sender, time);
 
                 const message = document.createElement('p');
@@ -1847,7 +1989,7 @@
                 privateNotesList.appendChild(div);
             });
         }
-        
+
         async function markPrivateNotesAsRead() {
             const batch = writeBatch(db);
             let hasUnread = false;
@@ -1870,4 +2012,5 @@
         initializeFirebase();
     </script>
 </body>
+
 </html>
