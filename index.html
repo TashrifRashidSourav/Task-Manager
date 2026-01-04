@@ -680,20 +680,24 @@
         }
 
         async function loadCredentialsAndSetupLogin() {
-            const docSnap = await getDoc(credentialsDocRef);
-            if (docSnap.exists() && Object.keys(docSnap.data()).length > 0) {
-                employeeCredentials = docSnap.data();
-            } else {
-                // First-time setup with default credentials
-                const defaultCredentials = {
-                    'Admin': 'pass1234',
-                    'Shariar': '12345', 'Hamza': '12345', 'Shezan': '12345',
-                    'Imtiaz': '12345', 'Shourav': '12345', 'Fahim': '12345'
-                };
-                await setDoc(credentialsDocRef, defaultCredentials);
-                employeeCredentials = defaultCredentials;
+            try {
+                const docSnap = await getDoc(credentialsDocRef);
+                if (docSnap.exists() && Object.keys(docSnap.data()).length > 0) {
+                    employeeCredentials = docSnap.data();
+                } else {
+                    // First-time setup with default credentials
+                    const defaultCredentials = {
+                        'Admin': 'pass1234',
+                        'Shariar': '12345', 'Hamza': '12345', 'Shezan': '12345',
+                        'Imtiaz': '12345', 'Shourav': '12345', 'Fahim': '12345'
+                    };
+                    await setDoc(credentialsDocRef, defaultCredentials);
+                    employeeCredentials = defaultCredentials;
+                }
+                setupLoginScreen();
+            } catch (error) {
+                console.error("Database Error:", error);
             }
-            setupLoginScreen();
         }
 
         // --- LOGIN / LOGOUT ---
