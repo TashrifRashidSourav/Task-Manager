@@ -637,10 +637,15 @@
         let allEntries = [];
         let userNotifications = [];
         let privateNotes = [];
-        let saveStatusTimeout;
-        let employeeToUpdatePassword = null;
-        let currentCalendarDate = new Date();
-        let currentDayDetail = { date: null };
+        // --- UTILS ---
+        function debounce(func, wait) {
+            let timeout;
+            return function (...args) {
+                const context = this;
+                clearTimeout(timeout);
+                timeout = setTimeout(() => func.apply(context, args), wait);
+            };
+        }
 
         // --- INITIALIZATION ---
         async function initializeFirebase() {
@@ -648,12 +653,8 @@
                 const app = initializeApp(firebaseConfig);
                 db = getFirestore(app);
                 auth = getAuth(app);
-
-                console.log("Firebase App Initialized");
-
                 onAuthStateChanged(auth, user => {
                     if (user) {
-                        console.log("User authenticated:", user.uid);
                         userId = user.uid;
                         const basePath = `artifacts/${appId}/public/data`;
                         dailyEntriesCollectionRef = collection(db, `${basePath}/dailyEntries`);
@@ -662,8 +663,6 @@
                         calendarEventsCollectionRef = collection(db, `${basePath}/calendarEvents`);
                         privateNotesCollectionRef = collection(db, `${basePath}/privateNotes`);
                         loadCredentialsAndSetupLogin();
-                    } else {
-                        console.log("User signed out");
                     }
                 });
 
@@ -672,10 +671,8 @@
                 } else {
                     await signInAnonymously(auth);
                 }
-                console.log("Sign-in attempt completed");
             } catch (error) {
-                console.error("Firebase Initialization/Auth Error:", error);
-                alert("Firebase Error: " + error.message);
+                console.error("Authentication/Init failed:", error);
             }
         }
 
