@@ -644,25 +644,39 @@
 
         // --- INITIALIZATION ---
         async function initializeFirebase() {
-            const app = initializeApp(firebaseConfig);
-            db = getFirestore(app);
-            auth = getAuth(app);
-            onAuthStateChanged(auth, user => {
-                if (user) {
-                    userId = user.uid;
-                    const basePath = `artifacts/${appId}/public/data`;
-                    dailyEntriesCollectionRef = collection(db, `${basePath}/dailyEntries`);
-                    credentialsDocRef = doc(db, `${basePath}/config/credentials`);
-                    notificationsCollectionRef = collection(db, `${basePath}/notifications`);
-                    calendarEventsCollectionRef = collection(db, `${basePath}/calendarEvents`);
-                    privateNotesCollectionRef = collection(db, `${basePath}/privateNotes`);
-                    loadCredentialsAndSetupLogin();
-                }
-            });
             try {
-                if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) await signInWithCustomToken(auth, __initial_auth_token);
-                else await signInAnonymously(auth);
-            } catch (error) { console.error("Authentication failed:", error); }
+                const app = initializeApp(firebaseConfig);
+                db = getFirestore(app);
+                auth = getAuth(app);
+
+                console.log("Firebase App Initialized");
+
+                onAuthStateChanged(auth, user => {
+                    if (user) {
+                        console.log("User authenticated:", user.uid);
+                        userId = user.uid;
+                        const basePath = `artifacts/${appId}/public/data`;
+                        dailyEntriesCollectionRef = collection(db, `${basePath}/dailyEntries`);
+                        credentialsDocRef = doc(db, `${basePath}/config/credentials`);
+                        notificationsCollectionRef = collection(db, `${basePath}/notifications`);
+                        calendarEventsCollectionRef = collection(db, `${basePath}/calendarEvents`);
+                        privateNotesCollectionRef = collection(db, `${basePath}/privateNotes`);
+                        loadCredentialsAndSetupLogin();
+                    } else {
+                        console.log("User signed out");
+                    }
+                });
+
+                if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
+                    await signInWithCustomToken(auth, __initial_auth_token);
+                } else {
+                    await signInAnonymously(auth);
+                }
+                console.log("Sign-in attempt completed");
+            } catch (error) {
+                console.error("Firebase Initialization/Auth Error:", error);
+                alert("Firebase Error: " + error.message);
+            }
         }
 
         async function loadCredentialsAndSetupLogin() {
