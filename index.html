@@ -1084,7 +1084,7 @@
                 div.contentEditable = true;
                 div.className = 'input-field min-h-[40px] flex-grow';
                 div.dataset.placeholder = `Enter ${field}...`;
-                div.addEventListener('input', debounce((e) => handleUpdateTask(dayId, task.id, field, e.target.innerText), 1000));
+                div.addEventListener('blur', (e) => handleUpdateTask(dayId, task.id, field, e.target.innerText));
             }
 
             wrapper.appendChild(div);
@@ -1117,7 +1117,7 @@
             input.value = task.submissionLink || '';
             input.placeholder = 'Paste link here...';
             input.className = 'input-field w-full text-xs flex-grow';
-            input.addEventListener('input', debounce((e) => handleUpdateTask(dayId, task.id, 'submissionLink', e.target.value), 1000));
+            input.addEventListener('blur', (e) => handleUpdateTask(dayId, task.id, 'submissionLink', e.target.value));
 
             const isLockedForEmployee = task.submissionLinkLockedByAdmin && !isAdminView;
             input.disabled = isLockedForEmployee;
